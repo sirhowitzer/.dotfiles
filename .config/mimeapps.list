@@ -1,1 +1,17 @@
-/home/greycap/.config/mimeapps.list
+[Default Applications]
+inode/directory=thunar.desktop
+application/x-gnome-saved-search=thunar.desktop
+text/html=brave-browser.desktop
+x-scheme-handler/http=brave-browser.desktop
+x-scheme-handler/https=brave-browser.desktop
+x-scheme-handler/about=brave-browser.desktop
+x-scheme-handler/unknown=brave-browser.desktop
+x-scheme-handler/mailto=brave-browser.desktop
+application/x-zerosize=feh.desktop
+x-scheme-handler/terminal=Alacritty.desktop
+
+[Added Associations]
+text/plain=libreoffice-writer.desktop;nvim.desktop;
+audio/mpeg=vlc.desktop;
+application/x-zerosize=feh.desktop;
+video/mp4=vlc.desktop;
