@@ -29,7 +29,7 @@ input {
     // Omitting settings disables them, or leaves them at their default values.
     // All commented-out settings here are examples, not defaults.
     touchpad {
-        // off
+        //off
         tap
         // dwt
         // dwtp
@@ -45,8 +45,8 @@ input {
     mouse {
         // off
         // natural-scroll
-        // accel-speed 0.2
-        // accel-profile "flat"
+        accel-speed -0.1
+        accel-profile "flat"
         // scroll-method "no-scroll"
     }
 
@@ -115,7 +115,7 @@ gestures{
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 10
+    gaps 0
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -130,7 +130,7 @@ layout {
         // Proportion sets the width as a fraction of the output width, taking gaps into account.
         // For example, you can perfectly fit four windows sized "proportion 0.25" on an output.
         // The default preset widths are 1/3, 1/2 and 2/3 of the output.
-	proportion 1.0
+	      proportion 1.0
         proportion 0.5
         proportion 0.66667
 
@@ -164,7 +164,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 3
+        width 0 
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -202,7 +202,7 @@ layout {
         // If you enable the border, you probably want to disable the focus ring.
         off
 
-        width 4
+        width 0
         active-color "#ffc87f"
         inactive-color "#505050"
 
@@ -276,11 +276,14 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "xdg-desktop-portal"
 spawn-at-startup "xdg-desktop-portal-gtk"
+spawn-at-startup "xdg-desktop-portal-wlr"
 
 spawn-at-startup "pipewire"
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "fcitx5 -d"
+spawn-at-startup "/usr/libexec/fcitx5-wayland-launcher --reopen"
 spawn-at-startup "qs" "-c" "noctalia-shell"
+
+spawn-at-startup "/home/greycap/Documents/PYTHON-PROJECTS/mouseless-qt-systemtray-toggler/.venv/bin/python3" "/home/greycap/Documents/PYTHON-PROJECTS/mouseless-qt-systemtray-toggler/main.py"
 
 environment {
     DISPLAY ":0"
@@ -320,6 +323,14 @@ animations {
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
     slowdown 0.8
+
+    window-open {
+      off
+    }
+
+    window-close {
+      off
+    }
 }
 
 // Window rules let you adjust behavior for individual windows.
@@ -334,6 +345,10 @@ window-rule {
     // You can get away with just app-id="wezterm" if you want.
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
+}
+
+window-rule {
+    open-maximized true 
 }
 
 // Open the Firefox picture-in-picture player as floating by default.
@@ -364,6 +379,13 @@ window-rule {
     clip-to-geometry true
 }
 
+recent-windows {
+    binds {
+        Mod+Tab         { next-window scope="all"; }
+        Alt+Tab         { next-window scope="workspace"; }
+    }
+}
+
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
@@ -384,8 +406,17 @@ binds {
     Mod+Return hotkey-overlay-title="Open a Heavy Terminal: kitty" { spawn "kitty"; }
     Mod+T hotkey-overlay-title="Open a Lightweight Terminal: alacritty" { spawn "alacritty"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Mod+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
-    Mod+Shift+S { spawn "sh" "-c" "grim -g \"$(slurp)\" - | wl-copy --type image/png"; }
+    Mod+F4 hotkey-overlay-title="Lock the Screen" { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
+    Mod+Shift+S { spawn "sh" "-c" "mkdir -p ~/Pictures/Screenshots && grim -g \"$(slurp)\" - | tee ~/Pictures/Screenshots/screenshot_$(date +\"%Y-%m-%d_%H-%M\").png | wl-copy --type image/png"; }
+    Mod+Alt+Shift+U { spawn-sh "qutebrowser https://databay.com/free-proxy-list/socks5" ; }
+    //Mod+Alt+H { spawn-sh "wtype -P left -p left" ; }
+    //Mod+Alt+L { spawn-sh "wtype -P right -p right" ; }
+    //Mod+Alt+J { spawn-sh "wtype -P down -p down" ; }
+    //Mod+Alt+K { spawn-sh "wtype -P up -p up" ; }
+    //Mod+Ctrl+Grave { spawn "sh" "-c" "/home/greycap/Documents/PYTHON-PROJECTS/mouseless-qt-systemtray-toggler/.venv/bin/python3 /home/greycap/Documents/PYTHON-PROJECTS/mouseless-qt-systemtray-toggler/main.py "; }
+    //Mod+Alt+Grave { spawn "sh" "-c" "mouseless --config ~/.config/mouseless/config.yaml" ;}
+    //Mod+Shift+Grave { spawn-sh "pkill -9 mouseless"; }
+    
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
@@ -395,8 +426,8 @@ binds {
     // The allow-when-locked=true property makes them work even when the session is locked.
     // Using spawn-sh allows to pass multiple arguments together with the command.
     // "-l 1.0" limits the volume to 100%.
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 2.0"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
     XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
     XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
@@ -561,7 +592,7 @@ binds {
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
 
     // Switches focus between the current and the previous workspace.
-    // Mod+Tab { focus-workspace-previous; }
+    // Mod+Tab { next-window workspace=true skip-hidden=true; }
 
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
@@ -581,6 +612,9 @@ binds {
     Mod+Ctrl+R { reset-window-height; }
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
+    F11 { fullscreen-window; }
+    Mod+F5 { spawn-sh "brightnessctl set 1%"; }
+    Mod+F6 { spawn-sh "brightnessctl set 100%"; }
 
     // Expand the focused column to space not taken up by other fully visible columns.
     // Makes the column "fill the rest of the space".

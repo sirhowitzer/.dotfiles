@@ -1,0 +1,7 @@
+[font]
+normal = { family = "ProFontWindows Nerd Font Propo", style = "Regular" }
+bold = { family = "ProFontWindows Nerd Font Propo", style = "Bold" }
+italic = { family = "ProFontWindows Nerd Font Propo", style = "Italic" }
+bold_italic = { family = "ProFontWindows Nerd Font Propo", style = "Bold Italic" }
+size = 18.0
+
