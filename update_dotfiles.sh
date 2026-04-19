@@ -1,3 +1,6 @@
+cp ~/.zshrc ~/.dotfiles/.zshrc
+cp ~/.zprofile ~/.dotfiles/.zprofile
+
 mkdir -p ~/.dotfiles/.config/fuzzel/
 cp -r ~/.config/fuzzel/* ~/.dotfiles/.config/fuzzel/
 
